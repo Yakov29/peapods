@@ -38,7 +38,7 @@ registerButton.addEventListener("click", async () => {
 
     // Check for password match
     if (password !== confirmPassword) {
-        alert("Пароли не совпадают!");
+        alert("Passwords do not match!");
         return;
     }
 
@@ -50,7 +50,7 @@ registerButton.addEventListener("click", async () => {
         // Check if username or email already exists
         const userExists = users.some(user => user.username === username || user.email === email);
         if (userExists) {
-            alert("Пользователь с таким именем или email уже существует.");
+            alert("A user with that username or email already exists.");
             return;
         }
 
@@ -64,13 +64,13 @@ registerButton.addEventListener("click", async () => {
 
         const registerResponse = await axios.post("https://peapods-base.onrender.com/accounts", userData);
         if (registerResponse.status === 201) {
-            alert("Регистрация успешна! Пожалуйста, залогиньтесь.");
+            alert("Registration successful! Please log in.");
             getstartedBackdrop.classList.remove("change__invisible");
             registerBackdrop.classList.add("change__invisible");
         }
     } catch (error) {
-        console.error("Ошибка при регистрации:", error);
-        alert("Произошла ошибка при регистрации. Пожалуйста, попробуйте снова.");
+        console.error("Registration error:", error);
+        alert("An error occurred during registration. Please try again.");
     }
 });
 
@@ -88,14 +88,14 @@ loginButton.addEventListener("click", async () => {
         const user = users.find(user => user.email === email && user.password === password);
 
         if (user) {
-            alert("Вход успешен!");
+            alert("Login successful!");
             localStorage.setItem("loggedInUser", JSON.stringify(user));
             location.reload();  // Refresh the page after logging in
         } else {
-            alert("Неверный email или пароль. Пожалуйста, попробуйте снова.");
+            alert("Invalid email or password. Please try again.");
         }
     } catch (error) {
-        console.error("Ошибка при входе:", error);
-        alert("Произошла ошибка при входе. Пожалуйста, попробуйте снова.");
+        console.error("Login error:", error);
+        alert("An error occurred during login. Please try again.");
     }
 });

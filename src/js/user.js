@@ -1,6 +1,5 @@
 import axios from "axios";
 
-// Функция для получения профиля пользователя
 async function fetchProfiles() {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
     const usernameFromURL = new URLSearchParams(window.location.search).get("username");
@@ -13,7 +12,6 @@ async function fetchProfiles() {
         document.getElementById("followersCount").textContent = `${loggedInUser.followersCount || 0} Followers`;
     }
     
-    // Получаем профиль пользователя по имени пользователя из URL
     if (usernameFromURL) {
         try {
             const response = await axios.get("https://peapods-base.onrender.com/accounts");
@@ -26,7 +24,7 @@ async function fetchProfiles() {
                 document.getElementById("podsCount").textContent = `${userProfile.podsCount || 0} Pods`;
                 document.getElementById("followingCount").textContent = `${userProfile.followingCount || 0} Following`;
                 document.getElementById("followersCount").textContent = `${userProfile.followersCount || 0} Followers`;
-                setupSubscribeButton(loggedInUser, userProfile); // Устанавливаем кнопку подписки
+                setupSubscribeButton(loggedInUser, userProfile);
             }
         } catch (error) {
             console.error("Error fetching user profile:", error);
@@ -34,12 +32,11 @@ async function fetchProfiles() {
     }
 }
 
-// Функция для получения подов конкретного пользователя
 async function fetchPods(username) {
     try {
         const response = await axios.get("https://peapods-base.onrender.com/pods");
         const pods = response.data
-            .filter(pod => pod.username === username) // Фильтруем поды по имени пользователя
+            .filter(pod => pod.username === username)
             .sort((a, b) => new Date(b.time) - new Date(a.time));
         
         const podsContainer = document.getElementById("podsContainer");
@@ -65,22 +62,20 @@ async function fetchPods(username) {
                     ${pod.comments ? pod.comments.map(comment => `
                         <li class="comment-item">
                             <p><b>${comment.username}</b>: ${comment.text}</p>
-
                         </li>
                     `).join('') : ''}
                 </ul>
             `;
 
-            // Обработчик клика на аватарку
             const userImage = podItem.querySelector(".pod__user__image");
             const usernameElement = podItem.querySelector(".pod__userdata");
 
             userImage.addEventListener("click", () => {
-                window.location.href = `/user.html?username=${encodeURIComponent(pod.username)}`; // Перенаправление на страницу профиля
+                window.location.href = `/user.html?username=${encodeURIComponent(pod.username)}`;
             });
 
             usernameElement.addEventListener("click", () => {
-                window.location.href = `/user.html?username=${encodeURIComponent(pod.username)}`; // Перенаправление на страницу профиля
+                window.location.href = `/user.html?username=${encodeURIComponent(pod.username)}`;
             });
 
             if (pod.userId === currentUserId) {
@@ -90,7 +85,6 @@ async function fetchPods(username) {
                 deleteButton.addEventListener("click", () => {
                     deletePod(pod.id);
                 });
-                
             }
 
             podsContainer.appendChild(podItem);
@@ -102,7 +96,6 @@ async function fetchPods(username) {
     }
 }
 
-// Функция для подписки на пользователя
 async function subscribeToUser(loggedInUser, userToSubscribe) {
     try {
         const updatedUser = {
@@ -119,12 +112,11 @@ async function subscribeToUser(loggedInUser, userToSubscribe) {
     }
 }
 
-// Функция для установки кнопки подписки
 function setupSubscribeButton(loggedInUser, userProfile) {
     const subscribeButton = document.getElementById("subscribeButton");
     
     subscribeButton.addEventListener("click", () => {
-        if (loggedInUser.id !== userProfile.id) { // Запрет подписки на себя
+        if (loggedInUser.id !== userProfile.id) {
             subscribeToUser(loggedInUser, userProfile);
         } else {
             alert("You cannot subscribe to yourself!");
@@ -132,11 +124,10 @@ function setupSubscribeButton(loggedInUser, userProfile) {
     });
 }
 
-// Функция для загрузки информации о пользователе при загрузке страницы
 document.addEventListener("DOMContentLoaded", async () => {
     await fetchProfiles();
     const usernameFromURL = new URLSearchParams(window.location.search).get("username");
     if (usernameFromURL) {
-        await fetchPods(usernameFromURL); // Передаем имя пользователя в функцию
+        await fetchPods(usernameFromURL);
     }
 });

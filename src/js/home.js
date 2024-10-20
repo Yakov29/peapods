@@ -28,7 +28,7 @@ async function fetchPods() {
             podItem.classList.add("pod");
             podItem.innerHTML = `
                 <div class="pod__title">
-                    <img class="pod__user__image" src="${pod.userImage || './images/Group 5.19.png'}" alt="User Image" style="cursor: pointer;" data-username="${pod.username}">
+                    <img style="display: none;" class="pod__user__image" src="${pod.userImage || './images/Group 5.19.png'}" alt="User Image" style="cursor: pointer;" data-username="${pod.username}">
                     <div class="pod__data">
                         <p class="pod__userdata" style="cursor: pointer;" data-username="${pod.username}">${pod.username}</p>
                         <p class="pod__time">${new Date(pod.time).toLocaleString()}</p>
