@@ -1,0 +1,263 @@
+.getstart__backdrop{
+    position: fixed;
+    background-color: #FFFFFF;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.getstart__title{
+    display: block;
+    margin-top: 30px;
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.getstart__description{
+    color: #009EFD;
+    font-size: 46px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.getstart__buttons{
+    display: flex;
+    width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+}
+
+
+
+.getstart__register{
+    width: 250px;
+    height: 100px;
+    background-color: #009EFD;
+    color: #FFFFFF;
+    font-size: 36px;
+    border-radius: 10px;
+}
+
+.getstart__register:hover{
+    background-color: #0272b7;
+}
+
+.getstart__login{
+    width: 250px;
+    height: 100px;
+    background-color: #45cd89;
+    color: #fff;
+    font-size: 36px;
+    border-radius: 10px;
+    margin-left: auto;
+}
+
+.getstart__login:hover{
+    background-color: #349766;
+}
+
+.register__backdrop{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.register__title{
+    display: block;
+    margin-top: 30px;
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.register__description{
+    color: #009EFD;
+    font-size: 46px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.register__maintitle{
+    color: #000;
+    font-size: 46px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.register__inputs{
+    display: flex;
+justify-content: center;
+gap: 20px;
+}
+
+.register__input{
+    width: 250px;
+    height: 40px;
+    padding-left: 10px;
+    border-radius: 10px;
+    border: none;
+    background-color: #dedede;
+}
+
+.register__button{
+    width: 200px;
+    height: 50px;
+    margin-top: 32px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 100px;
+    background-color: #45cd89;
+    color: #FFFFFF;
+    font-size: 20;
+}
+
+.register__disclaimer{
+    font-size: 15px;
+    margin-top: 15px;
+    text-align: center;
+    color: #B4B4B4;
+}
+
+.register__login{
+    position: absolute;
+    bottom: 10px;
+    font-size: 20px;
+    width: 100%;
+    text-align: center;
+    display: block;
+    color: #8B8C94;
+}
+
+.register__login__link{
+    color: #009EFD;
+}
+
+
+.login__backdrop{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.login__title{
+    display: block;
+    margin-top: 30px;
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.login__description{
+    color: #009EFD;
+    font-size: 46px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.login__maintitle{
+    color: #000;
+    font-size: 46px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.login__inputs{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    
+}
+
+.login__input{
+    width: 250px;
+    height: 40px;
+    padding-left: 10px;
+    border-radius: 10px;
+    border: none;
+    background-color: #dedede;
+}
+
+.login__login{
+    position: absolute;
+    bottom: 10px;
+    font-size: 20px;
+    width: 100%;
+    text-align: center;
+    display: block;
+    color: #8B8C94;
+}
+
+.login__button{
+    width: 200px;
+    height: 50px;
+    margin-top: 32px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 100px;
+    background-color: #45cd89;
+    color: #FFFFFF;
+    font-size: 20;
+}
+
+.login__login__link{
+    color: #009EFD;
+}
+
+
+@media screen and (max-width:1400px) {
+   .getstart__title{
+    width: 80%;
+   }
+   .register__title{
+   width: 80%;
+   }
+   
+   .login__title{
+    width: 80%;
+   }
+
+   .getstart__description{
+    font-size: 25px;
+   }
+
+   .getstart__buttons{
+    display: block;
+    width: 100%;
+text-align: center;
+   }
+
+   .getstart__register{
+    margin-bottom: 50px;
+   }
+
+   .register__inputs{
+    display: block;
+    width:100%;
+    text-align: center;
+    
+   }
+
+   .register__input{
+    margin-bottom: 10px;
+   }
+
+   .login__inputs{
+    display: block;
+    width: 100%;
+    text-align: center;
+   }
+
+   .login__input{
+    margin-bottom: 10px;
+   }
+}
+
