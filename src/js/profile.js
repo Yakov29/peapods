@@ -46,7 +46,7 @@ async function logout() {
     // Clear the user data from local storage
     localStorage.removeItem("loggedInUser");
     // Redirect to the login page or homepage
-    window.location.href = "./login.html"; // Adjust the path as needed
+    window.location.href = "./index.html"; // Adjust the path as needed
 }
 
 async function deleteAccount() {

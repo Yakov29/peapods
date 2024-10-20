@@ -82,17 +82,13 @@ async function fetchPods() {
 // Удаление пода
 async function deletePod(podId) {
     try {
-        // Получаем информацию о поде перед его удалением
         const response = await axios.get(`https://peapods-base.onrender.com/pods/${podId}`);
         const pod = response.data;
 
-        // Удаляем под
         await axios.delete(`https://peapods-base.onrender.com/pods/${podId}`);
 
-        // Обновляем количество подов в профиле пользователя
         await updateProfilePodCountOnDelete(pod.username);
 
-        // Обновляем список подов на странице
         fetchPods();
     } catch (error) {
         console.error("Error deleting pod:", error);
@@ -107,7 +103,7 @@ async function updateProfilePodCountOnDelete(username) {
         const profile = profiles.find(profile => profile.username === username);
 
         if (profile) {
-            profile.podsCount = (profile.podsCount || 0) - 1; // Уменьшаем количество подов
+            profile.podsCount = (profile.podsCount || 0) - 1;
             await axios.put(`https://peapods-base.onrender.com/accounts/${profile.id}`, profile);
         }
     } catch (error) {
@@ -147,7 +143,7 @@ async function addComment(podId, commentText) {
         const pod = response.data;
 
         const newComment = {
-            commentId: Date.now(), // Уникальный идентификатор комментария
+            commentId: Date.now(),
             userId: loggedInUser.id,
             username: loggedInUser.username,
             text: commentText
@@ -158,7 +154,7 @@ async function addComment(podId, commentText) {
 
         await axios.put(`https://peapods-base.onrender.com/pods/${podId}`, pod);
 
-        fetchPods(); // Обновляем список подов для отображения нового комментария
+        fetchPods();
     } catch (error) {
         console.error("Error adding comment:", error);
     }
@@ -174,7 +170,7 @@ async function deleteComment(podId, commentId) {
 
         await axios.put(`https://peapods-base.onrender.com/pods/${podId}`, pod);
 
-        fetchPods(); // Обновляем список подов для удаления комментария
+        fetchPods();
     } catch (error) {
         console.error("Error deleting comment:", error);
     }
@@ -198,47 +194,87 @@ closeModalButton.addEventListener("click", () => {
     }, 300);
 });
 
+// Ограничение размера поста (15 Кб)
 submitPodButton.addEventListener("click", async () => {
     const podText = document.getElementById("podText").value;
-    const podImageInput = document.getElementById("podImageInput").files[0];
-    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    const podImage = document.getElementById("podImage").files[0];
 
-    const podData = {
-        text: podText,
-        username: loggedInUser.username,
-        time: new Date().toISOString(),
-        userImage: document.querySelector(".home__avatar").src,
-        userId: loggedInUser.id
-    };
-
-    if (podImageInput) {
-        const reader = new FileReader();
-        reader.onload = async function (event) {
-            podData.image = event.target.result;
-            await createPod(podData);
-        };
-        reader.readAsDataURL(podImageInput);
-    } else {
-        await createPod(podData);
+    if (podText.trim() === "") {
+        alert("Pod cannot be empty!");
+        return;
     }
+
+    if (new Blob([podText]).size > 15360) {
+        alert("Pod text exceeds the size limit (15 Kb)!");
+        return;
+    }
+
+    await addPod(podText, podImage);
+
+    createPodModal.classList.toggle("change__invisible");
+    setTimeout(() => {
+        createPodModal.style.display = "none";
+    }, 300);
 });
 
-// Создание нового пода
-async function createPod(podData) {
+// Добавление нового пода
+async function addPod(podText, podImage) {
     try {
-        await axios.post("https://peapods-base.onrender.com/pods", podData);
-        fetchPods(); // Обновляем список подов
-        createPodModal.classList.toggle("change__invisible");
-        setTimeout(() => {
-            createPodModal.style.display = "none";
-        }, 300);
+        const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+        const podData = {
+            username: loggedInUser.username,
+            text: podText,
+            time: new Date().toISOString(),
+            comments: []
+        };
+
+        if (podImage) {
+            const reader = new FileReader();
+            reader.onload = async function () {
+                podData.image = reader.result;
+                await savePod(podData);
+            };
+            reader.readAsDataURL(podImage);
+        } else {
+            await savePod(podData);
+        }
     } catch (error) {
-        console.error("Error creating pod:", error);
+        console.error("Error adding pod:", error);
     }
 }
 
-// Инициализация страницы
-document.addEventListener("DOMContentLoaded", () => {
-    fetchProfiles();
-    fetchPods();
-});
+// Сохранение пода
+async function savePod(podData) {
+    try {
+        await axios.post("https://peapods-base.onrender.com/pods", podData);
+
+        const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+        loggedInUser.podsCount = (loggedInUser.podsCount || 0) + 1;
+        localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+
+        await updateProfilePodCount(loggedInUser.username);
+
+        fetchPods();
+    } catch (error) {
+        console.error("Error saving pod:", error);
+    }
+}
+
+// Обновление количества подов в профиле
+async function updateProfilePodCount(username) {
+    try {
+        const response = await axios.get("https://peapods-base.onrender.com/accounts");
+        const profiles = response.data;
+        const profile = profiles.find(profile => profile.username === username);
+
+        if (profile) {
+            profile.podsCount = (profile.podsCount || 0) + 1;
+            await axios.put(`https://peapods-base.onrender.com/accounts/${profile.id}`, profile);
+        }
+    } catch (error) {
+        console.error("Error updating profile pod count:", error);
+    }
+}
+
+fetchProfiles();
+fetchPods();
