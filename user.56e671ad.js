@@ -12,9 +12,8 @@ var e=globalThis,t={},o={},n=e.parcelRequire2ef1;null==n&&((n=function(e){if(e i
                     ${e.comments?e.comments.map(e=>`
                         <li class="comment-item">
                             <p><b>${e.username}</b>: ${e.text}</p>
-
                         </li>
                     `).join(""):""}
                 </ul>
             `;let r=t.querySelector(".pod__user__image"),a=t.querySelector(".pod__userdata");if(r.addEventListener("click",()=>{window.location.href=`/user.html?username=${encodeURIComponent(e.username)}`}),a.addEventListener("click",()=>{window.location.href=`/user.html?username=${encodeURIComponent(e.username)}`}),e.userId===n){let t=document.createElement("button");t.textContent="Delete Pod",t.classList.add("delete-pod-button"),t.addEventListener("click",()=>{deletePod(e.id)})}o.appendChild(t)}),setupCommentListeners()}catch(e){console.error("Error fetching pods:",e)}}async function l(e,t){try{let o={...e,following:[...e.following||[],t.username]};await (0,r.default).put(`https://peapods-base.onrender.com/accounts/${e.id}`,o),localStorage.setItem("loggedInUser",JSON.stringify(o)),alert(`Subscribed to ${t.username} successfully!`)}catch(e){console.error("Error subscribing to user:",e),alert("An error occurred while subscribing.")}}document.addEventListener("DOMContentLoaded",async()=>{await a();let e=new URLSearchParams(window.location.search).get("username");e&&await s(e)});
-//# sourceMappingURL=user.c60738a1.js.map
+//# sourceMappingURL=user.56e671ad.js.map
