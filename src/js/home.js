@@ -83,11 +83,8 @@ async function fetchPods() {
 // Delete a pod
 async function deletePod(podId) {
     try {
-        const response = await axios.get(`https://peapods-base.onrender.com/pods/${podId}`);
-        const pod = response.data;
-
         await axios.delete(`https://peapods-base.onrender.com/pods/${podId}`);
-        await updateProfilePodCountOnDelete(pod.username);
+        await updateProfilePodCountOnDelete(podId);
         fetchPods();
     } catch (error) {
         console.error("Error deleting pod:", error);
@@ -95,11 +92,14 @@ async function deletePod(podId) {
 }
 
 // Update profile pod count on delete
-async function updateProfilePodCountOnDelete(username) {
+async function updateProfilePodCountOnDelete(podId) {
     try {
-        const response = await axios.get("https://peapods-base.onrender.com/accounts");
-        const profiles = response.data;
-        const profile = profiles.find(profile => profile.username === username);
+        const response = await axios.get("https://peapods-base.onrender.com/pods/" + podId);
+        const pod = response.data;
+        
+        const profileResponse = await axios.get("https://peapods-base.onrender.com/accounts");
+        const profiles = profileResponse.data;
+        const profile = profiles.find(profile => profile.username === pod.username);
 
         if (profile) {
             profile.podsCount = (profile.podsCount || 0) - 1;
@@ -197,12 +197,16 @@ submitPodButton.addEventListener("click", async () => {
     const isAnonymous = document.getElementById("anonymousCheckbox").checked;
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
+    // Check if avatar exists before accessing its src
+    const avatarElement = document.querySelector(".home__avatar");
+    const userImage = avatarElement ? avatarElement.src : null;
+
     const podData = {
         text: podText,
-        username: isAnonymous ? null : loggedInUser.username,
         time: new Date().toISOString(),
-        userImage: isAnonymous ? null : document.querySelector(".home__avatar").src,
-        userId: isAnonymous ? null : loggedInUser.id
+        userImage: isAnonymous ? null : userImage,
+        userId: isAnonymous ? null : loggedInUser.id,
+        username: isAnonymous ? null : loggedInUser.username
     };
 
     if (podImageInput) {
@@ -229,10 +233,11 @@ async function createPod(podData) {
     }
 }
 
-// Initialize
-fetchProfiles();
-fetchPods();
-
+// Run fetchProfiles and fetchPods on page load
+document.addEventListener("DOMContentLoaded", () => {
+    fetchProfiles();
+    fetchPods();
+});
 
 const toTopButton = document.querySelector(".totop");
 const updatePods = document.querySelector(".updatepage");
