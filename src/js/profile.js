@@ -1,76 +1,93 @@
 import axios from "axios";
 
+// Fetch user profile data on page load
 async function fetchProfile() {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
     if (loggedInUser) {
-        // Display the avatar; the user cannot change it
-        document.getElementById("profileAvatar").src = loggedInUser.avatar || './images/default-avatar.png'; // Default avatar
         document.getElementById("name").value = loggedInUser.name;
         document.getElementById("username").value = loggedInUser.username;
+    } else {
+        console.error("No logged-in user data found.");
     }
 }
 
+// Update user profile
 async function updateProfile(event) {
-    event.preventDefault(); // Prevent the form from submitting normally
+    event.preventDefault(); // Prevent form submission
 
     const name = document.getElementById("name").value;
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
-
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
-    if (loggedInUser) {
+    if (loggedInUser && loggedInUser.id) {
         try {
-            // Update user data without changing the avatar
             const updatedUser = {
                 ...loggedInUser,
                 name,
                 username,
-                password, // Ensure you hash this on the server-side for security
+                password // Ensure password is hashed on the server side
             };
 
-            await axios.put(`https://peapods-base.onrender.com/accounts/${loggedInUser.id}`, updatedUser);
+            const response = await fetch(`https://peapods-base.onrender.com/accounts/${loggedInUser.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedUser)
+            });
 
-            // Update local storage
-            localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
-
-            alert("Profile updated successfully!");
+            if (response.ok) {
+                // Update local storage
+                localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
+                alert("Profile updated successfully!");
+            } else {
+                throw new Error("Failed to update profile: " + response.status);
+            }
         } catch (error) {
-            console.error("Error updating profile:", error);
+            console.error("Error updating profile:", error.message);
             alert("An error occurred while updating the profile.");
         }
+    } else {
+        console.error("User ID is missing or user is not logged in.");
     }
 }
 
-async function logout() {
-    // Clear the user data from local storage
+// Logout function
+function logout() {
     localStorage.removeItem("loggedInUser");
-    // Redirect to the login page or homepage
-    window.location.href = "./index.html"; // Adjust the path as needed
+    window.location.href = "./index.html"; // Redirect to the login or homepage
 }
 
+// Delete account function
 async function deleteAccount() {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-
-    if (loggedInUser) {
+    if (loggedInUser && loggedInUser.id) {
         try {
-            await axios.delete(`https://peapods-base.onrender.com/accounts/${loggedInUser.id}`);
-            // Clear the user data from local storage
-            localStorage.removeItem("loggedInUser");
-            alert("Account deleted successfully!");
-            // Redirect to the homepage or login page
-            window.location.href = "./index.html"; // Adjust the path as needed
+            const response = await fetch(`https://peapods-base.onrender.com/accounts/${loggedInUser.id}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                localStorage.removeItem("loggedInUser");
+                alert("Account deleted successfully!");
+                window.location.href = "./index.html"; // Redirect to the homepage or login page
+            } else {
+                throw new Error("Failed to delete account: " + response.status);
+            }
         } catch (error) {
-            console.error("Error deleting account:", error);
+            console.error("Error deleting account:", error.message);
             alert("An error occurred while deleting the account.");
         }
+    } else {
+        console.error("User ID is missing or user is not logged in.");
     }
 }
 
-// Add event listener for form submission
+// Event listeners for form submission, logout, and delete actions
 document.getElementById("profileForm").addEventListener("submit", updateProfile);
 document.getElementById("logoutButton").addEventListener("click", logout);
 document.getElementById("deleteAccountButton").addEventListener("click", deleteAccount);
 
-// Fetch profile data on page load
+// Load profile data when the page loads
 window.addEventListener("DOMContentLoaded", fetchProfile);

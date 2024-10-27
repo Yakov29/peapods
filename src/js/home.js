@@ -3,10 +3,32 @@ import axios from "axios";
 // Fetch user profile
 async function fetchProfiles() {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    
     if (loggedInUser) {
-        document.getElementById("profileName").textContent = loggedInUser.name;
-        document.getElementById("profileNickname").textContent = `@${loggedInUser.username}`;
+        try {
+            const response = await axios.get(`https://peapods-base.onrender.com/accounts/${loggedInUser.id}`);
+            const user = response.data;
+
+            if (user) {
+                document.getElementById("profileName").textContent = user.name;
+                document.getElementById("profileNickname").textContent = `@${user.username}`;
+            } else {
+                handleProfileError();
+            }
+        } catch (error) {
+            console.error("Error fetching profile:", error);
+            handleProfileError();
+        }
+    } else {
+        window.location.href = "index.html";
     }
+}
+
+// Handle missing or deleted profile error
+function handleProfileError() {
+    alert("Аккаунт видалено або виникла помилка.");
+    localStorage.removeItem("loggedInUser"); 
+    window.location.href = "index.html"; 
 }
 
 // Fetch pods
@@ -37,15 +59,14 @@ async function fetchPods() {
                     ${pod.comments ? pod.comments.map(comment => `
                         <li class="comment-item">
                             <p><b>${comment.username}</b>: ${comment.text}</p>
-                            ${comment.userId === currentUserId ? `<button class="delete-comment-btn" data-comment-id="${comment.commentId}" data-pod-id="${pod.id}">Delete</button>` : ''}
+                            ${comment.userId === currentUserId ? `<button class="delete-comment-btn" data-comment-id="${comment.commentId}" data-pod-id="${pod.id}"><i class="fas fa-trash-alt"></i></button>` : ''}
                         </li>
                     `).join('') : ''}
                 </ul>
                 <input class="comment-text" id="commentText-${pod.id}" placeholder="Write a comment...">
-                <button class="comment-btn" data-pod-id="${pod.id}">Comment</button>
+                <button class="comment-btn" data-pod-id="${pod.id}"><i class="fas fa-comment"></i></button>
             `;
 
-            // User image click handler
             const userImage = podItem.querySelector(".pod__user__image");
             const usernameElement = podItem.querySelector(".pod__userdata");
 
@@ -63,8 +84,8 @@ async function fetchPods() {
 
             if (pod.userId === currentUserId) {
                 const deleteButton = document.createElement("button");
-                deleteButton.textContent = "Delete Pod";
                 deleteButton.classList.add("delete-pod-button");
+                deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
                 deleteButton.addEventListener("click", () => {
                     deletePod(pod.id);
                 });
@@ -96,7 +117,7 @@ async function updateProfilePodCountOnDelete(podId) {
     try {
         const response = await axios.get("https://peapods-base.onrender.com/pods/" + podId);
         const pod = response.data;
-        
+
         const profileResponse = await axios.get("https://peapods-base.onrender.com/accounts");
         const profiles = profileResponse.data;
         const profile = profiles.find(profile => profile.username === pod.username);
@@ -191,74 +212,75 @@ closeModalButton.addEventListener("click", () => {
     }, 300);
 });
 
+// Prevent modal from closing on submit and fetch pods again
 submitPodButton.addEventListener("click", async () => {
     const podText = document.getElementById("podText").value;
     const podImageInput = document.getElementById("podImageInput").files[0];
     const isAnonymous = document.getElementById("anonymousCheckbox").checked;
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
-    // Check if avatar exists before accessing its src
-    const avatarElement = document.querySelector(".home__avatar");
-    const userImage = avatarElement ? avatarElement.src : null;
-
-    const podData = {
-        text: podText,
-        time: new Date().toISOString(),
-        userImage: isAnonymous ? null : userImage,
-        userId: isAnonymous ? null : loggedInUser.id,
-        username: isAnonymous ? null : loggedInUser.username
-    };
-
-    if (podImageInput) {
-        const reader = new FileReader();
-        reader.onload = async function (event) {
-            podData.image = event.target.result;
-            await createPod(podData);
+    if (podText.trim()) {
+        const newPod = {
+            userId: isAnonymous ? null : loggedInUser.id,
+            username: isAnonymous ? "Anonymous" : loggedInUser.username,
+            text: podText,
+            time: Date.now(),
+            comments: []
         };
-        reader.readAsDataURL(podImageInput);
-    } else {
-        await createPod(podData);
-    }
 
-    createPodModal.style.display = "none";
+        if (podImageInput) {
+            const imageUrl = await uploadImage(podImageInput);
+            newPod.image = imageUrl;
+        }
+
+        await axios.post("https://peapods-base.onrender.com/pods", newPod);
+        await updateProfilePodCountOnCreate(loggedInUser.id);
+        fetchPods();
+        createPodModal.classList.toggle("change__invisible");
+        createPodModal.style.display = "none";
+    }
 });
 
-// Create a new pod
-async function createPod(podData) {
+// Upload image function
+async function uploadImage(image) {
+    const formData = new FormData();
+    formData.append("image", image);
+
+    const response = await axios.post("https://peapods-base.onrender.com/upload", formData);
+    return response.data.imageUrl; // Adjust based on your API response structure
+}
+
+// Update profile pod count on create
+async function updateProfilePodCountOnCreate(userId) {
     try {
-        await axios.post("https://peapods-base.onrender.com/pods", podData);
-        fetchPods();
+        const profileResponse = await axios.get(`https://peapods-base.onrender.com/accounts/${userId}`);
+        const profile = profileResponse.data;
+
+        if (profile) {
+            profile.podsCount = (profile.podsCount || 0) + 1;
+            await axios.put(`https://peapods-base.onrender.com/accounts/${profile.id}`, profile);
+        }
     } catch (error) {
-        console.error("Error creating pod:", error);
+        console.error("Error updating profile pod count on create:", error);
     }
 }
 
-// Run fetchProfiles and fetchPods on page load
-document.addEventListener("DOMContentLoaded", () => {
-    fetchProfiles();
-    fetchPods();
-});
+// Event listeners for opening modals
+document.addEventListener("DOMContentLoaded", fetchProfiles);
+document.addEventListener("DOMContentLoaded", fetchPods);
 
-const toTopButton = document.querySelector(".totop");
-const updatePods = document.querySelector(".updatepage");
+const toTopButton = document.getElementById("toTopButton");
 
+// Показати кнопку при прокручуванні вниз
+window.onscroll = function() {
+    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+        toTopButton.style.display = "block";
+    } else {
+        toTopButton.style.display = "none";
+    }
+};
+
+// Прокрутка до верхньої частини сторінки
 toTopButton.addEventListener("click", () => {
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
+    window.scrollTo({top: 0, behavior: 'smooth'});
 });
-
-window.addEventListener("scroll", () => {
-  if (window.scrollY > 100) {
-    toTopButton.style.display = "block";
-  } else {
-    toTopButton.style.display = "none";
-  }
-});
-
-
-updatePods.addEventListener("click", () => {
-    fetchProfiles();
-    fetchPods();
-})

@@ -75,21 +75,29 @@
   }
   
   .pod {
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 20px 20px rgba(0, 0, 0, 0.5);
+      border: 2px solid #ccc; /* Увеличенная толщина рамки */
       padding: 20px;
       border-radius: 12px;
-      margin-top: 50px;
+      margin-bottom: 50px;
       max-width: 600px;
       margin-left: auto;
       margin-right: auto;
       background-color: #fefefe;
   }
+
+  .pod__text {
+    font-size: 1.2em; /* Увеличенный размер шрифта текста пода */
+    margin: 15px 0; /* Увеличенный отступ */
+    line-height: 1.5; /* Увеличенный межстрочный интервал */
+}
   
-  .pod__title {
-      display: flex;
-      gap: 15px;
-      align-items: center;
-  }
+.pod__title {
+    display: flex;
+    align-items: center;
+    font-size: 1.5em; /* Увеличенный размер шрифта заголовка */
+    color: #001C27; /* Цвет заголовка */
+}
   
   .pod__user__image {
       border: 4px solid #FFFFFF;
@@ -140,17 +148,18 @@
       margin-bottom: 10px;
       background-color: #f9f9f9;
   }
-  
   .comment-text {
-      width: 90%;
-      height: 40px;
-      padding: 10px;
-      border-radius: 10px;
-      border: none;
-      background-color: #dedede;
-      font-size: 14px;
-      resize: none;
-  }
+    width: calc(100% - 50px); /* Увеличенный размер поля ввода комментария */
+    padding: 10px; /* Увеличенный внутренний отступ */
+    margin: 10px 0; /* Увеличенный отступ */
+    font-size: 1.2em; /* Увеличенный размер шрифта */
+    border: 1px solid #ccc; /* Рамка для поля ввода */
+    border-radius: 5px; /* Скругление углов */
+}
+.pod__likes {
+    margin: 10px 0;
+    font-size: 1.2em; /* Увеличенный размер шрифта для количества лайков */
+}
   
   .home__name{
     font-size: 46px;
@@ -163,13 +172,28 @@
     font-size: 30px;
 }
 
-  .like-comment-btn{
-    background-color: rgb(0, 123, 255);
-    color: white;
-    border-radius: 10px;
-    width: 100px;
-    height: 30px;
-  }
+.comment-btn,
+.like-pod-btn,
+.like-comment-btn,
+.delete-comment-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #007bff;
+    font-size: 1.2em; /* Увеличенный размер шрифта для кнопок */
+    padding: 10px 15px; /* Увеличенные отступы для кнопок */
+    border-radius: 5px; /* Скругление углов кнопок */
+    transition: background-color 0.3s; /* Плавный переход цвета фона */
+}
+
+.comment-btn:hover,
+.like-pod-btn:hover,
+.like-comment-btn:hover,
+.delete-comment-btn:hover {
+    background-color: #e0e0e0; /* Цвет фона при наведении */
+    color: #0056b3; /* Цвет текста при наведении */
+}
+
   
   .comment-btn {
       width: 150px;
@@ -190,7 +214,7 @@
       background-color: #36b37e;
   }
 
-  .totop{
+  .updatepage{
     position: fixed;
     background-color: #36b37e;
     padding: 10px;
@@ -199,16 +223,17 @@
     right: 30px;
     bottom: 30px;
     outline: 5px solid white;
+    display: none;
   }
 
-  .updatepage{
+  .totop{
     position: fixed;
     background-color: #36b37e;
     padding: 20px;
     font-size: 30;
     border-radius: 100px;
-    right: 10px;
-    top: 100px;
+    right: 50px;
+    bottom: 50px;
     outline: 5px solid white;
     color: white;
     
