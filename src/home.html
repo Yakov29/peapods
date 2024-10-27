@@ -12,11 +12,27 @@
       href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/3.0.1/modern-normalize.min.css"
+      integrity="sha512-q6WgHqiHlKyOqslT/lgBgodhd03Wp4BEqKeW6nNtlOY4quzyG3VoQKFrieaCeSnuVseNKRGpGeDU3qPmabCANg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
     <link rel="stylesheet" href="./SASS/index.scss" />
     <title>Peapods | Home</title>
   </head>
-  <body>
+  <body
+    style="
+      /* background-image: url(./images/R-2.jpg); */
+      background-color: #006db0;
+      background-blend-mode: overlay;
+    "
+  >
     <include src="./header.html"></include>
     <div class="home__profile" id="profileContainer">
       <!-- <img class="home__avatar" src="./images/Group 5.19.png" alt="" /> -->
@@ -34,8 +50,8 @@
         </li>
       </ul> -->
       <a href="./profile.html"><button class="home__edit">Edit</button></a>
-    </div>    
-    
+    </div>
+
     <ul class="pods" id="podsContainer">
       <!-- Pods will be dynamically inserted here -->
     </ul>
@@ -52,8 +68,8 @@
           <!-- <input id="podDescription" placeholder="Description" required> -->
           <input type="file" id="podImageInput" accept="image/*" />
           <label>
-            <input type="checkbox" id="anonymousCheckbox"> Post Anonymously
-        </label>
+            <input type="checkbox" id="anonymousCheckbox" /> Post Anonymously
+          </label>
           <button id="submitPodButton">Submit</button>
         </div>
       </div>
@@ -61,6 +77,6 @@
 
     <script type="module" src="./js/home.js"></script>
   </body>
-  <button class="totop" id="toTopButton" style="display:none;">👆</button>
+  <button class="totop" id="toTopButton" style="display: none">👆</button>
   <button class="updatepage">⇄</button>
 </html>

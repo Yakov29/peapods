@@ -1,9 +1,17 @@
 
-
+header{
+    background-color: white;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 50px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
 header .container{
     display: flex;
     position: relative;
     align-items: center;
+
 }
 
 .header__menu{
