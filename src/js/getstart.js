@@ -50,7 +50,7 @@ registerButton.addEventListener("click", async () => {
         // Check if username or email already exists
         const userExists = users.some(user => user.username === username || user.email === email);
         if (userExists) {
-            alert("A user with that username or email already exists.");
+            alert("A user with this name or email already exists.");
             return;
         }
 
@@ -69,7 +69,7 @@ registerButton.addEventListener("click", async () => {
             registerBackdrop.classList.add("change__invisible");
         }
     } catch (error) {
-        console.error("Registration error:", error);
+        console.error("Error during registration:", error);
         alert("An error occurred during registration. Please try again.");
     }
 });
@@ -92,10 +92,10 @@ loginButton.addEventListener("click", async () => {
             localStorage.setItem("loggedInUser", JSON.stringify(user));
             location.reload();  // Refresh the page after logging in
         } else {
-            alert("Invalid email or password. Please try again.");
+            alert("Incorrect email or password. Please try again.");
         }
     } catch (error) {
-        console.error("Login error:", error);
+        console.error("Error during login:", error);
         alert("An error occurred during login. Please try again.");
     }
 });

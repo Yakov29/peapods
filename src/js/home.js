@@ -1,18 +1,15 @@
 import axios from "axios";
 
-// Функция для получения профиля пользователя
+// Fetch user profile
 async function fetchProfiles() {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
     if (loggedInUser) {
         document.getElementById("profileName").textContent = loggedInUser.name;
         document.getElementById("profileNickname").textContent = `@${loggedInUser.username}`;
-        document.getElementById("podsCount").textContent = `${loggedInUser.podsCount || 0} Pods`;
-        document.getElementById("followingCount").textContent = `${loggedInUser.followingCount || 0} Following`;
-        document.getElementById("followersCount").textContent = `${loggedInUser.followersCount || 0} Followers`;
     }
 }
 
-// Функция для получения подов
+// Fetch pods
 async function fetchPods() {
     try {
         const response = await axios.get("https://peapods-base.onrender.com/pods");
@@ -28,9 +25,9 @@ async function fetchPods() {
             podItem.classList.add("pod");
             podItem.innerHTML = `
                 <div class="pod__title">
-                    <img style="display: none;" class="pod__user__image" src="${pod.userImage || './images/Group 5.19.png'}" alt="User Image" style="cursor: pointer;" data-username="${pod.username}">
+                    <img class="pod__user__image" src="${pod.userImage || './images/default-avatar.png'}" alt="User Image" style="cursor: pointer;" data-username="${pod.username}">
                     <div class="pod__data">
-                        <p class="pod__userdata" style="cursor: pointer;" data-username="${pod.username}">${pod.username}</p>
+                        <p class="pod__userdata" style="cursor: pointer;" data-username="${pod.username}">${pod.username || "Anonymous"}</p>
                         <p class="pod__time">${new Date(pod.time).toLocaleString()}</p>
                     </div>
                 </div>
@@ -48,16 +45,20 @@ async function fetchPods() {
                 <button class="comment-btn" data-pod-id="${pod.id}">Comment</button>
             `;
 
-            // Обработчик клика на аватарку
+            // User image click handler
             const userImage = podItem.querySelector(".pod__user__image");
             const usernameElement = podItem.querySelector(".pod__userdata");
 
             userImage.addEventListener("click", () => {
-                window.location.href = `/user.html?username=${encodeURIComponent(pod.username)}`; // Перенаправление на страницу профиля
+                if (pod.username) {
+                    window.location.href = `/user.html?username=${encodeURIComponent(pod.username)}`;
+                }
             });
 
             usernameElement.addEventListener("click", () => {
-                window.location.href = `/user.html?username=${encodeURIComponent(pod.username)}`; // Перенаправление на страницу профиля
+                if (pod.username) {
+                    window.location.href = `/user.html?username=${encodeURIComponent(pod.username)}`;
+                }
             });
 
             if (pod.userId === currentUserId) {
@@ -79,23 +80,21 @@ async function fetchPods() {
     }
 }
 
-// Удаление пода
+// Delete a pod
 async function deletePod(podId) {
     try {
         const response = await axios.get(`https://peapods-base.onrender.com/pods/${podId}`);
         const pod = response.data;
 
         await axios.delete(`https://peapods-base.onrender.com/pods/${podId}`);
-
         await updateProfilePodCountOnDelete(pod.username);
-
         fetchPods();
     } catch (error) {
         console.error("Error deleting pod:", error);
     }
 }
 
-// Обновление количества подов в профиле при удалении пода
+// Update profile pod count on delete
 async function updateProfilePodCountOnDelete(username) {
     try {
         const response = await axios.get("https://peapods-base.onrender.com/accounts");
@@ -111,7 +110,7 @@ async function updateProfilePodCountOnDelete(username) {
     }
 }
 
-// Установка слушателей для кнопок комментариев
+// Setup listeners for comment buttons
 function setupCommentListeners() {
     const commentButtons = document.querySelectorAll(".comment-btn");
     const deleteCommentButtons = document.querySelectorAll(".delete-comment-btn");
@@ -135,7 +134,7 @@ function setupCommentListeners() {
     });
 }
 
-// Добавление комментария
+// Add a comment
 async function addComment(podId, commentText) {
     try {
         const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
@@ -153,14 +152,13 @@ async function addComment(podId, commentText) {
         pod.comments.push(newComment);
 
         await axios.put(`https://peapods-base.onrender.com/pods/${podId}`, pod);
-
         fetchPods();
     } catch (error) {
         console.error("Error adding comment:", error);
     }
 }
 
-// Удаление комментария
+// Delete a comment
 async function deleteComment(podId, commentId) {
     try {
         const response = await axios.get(`https://peapods-base.onrender.com/pods/${podId}`);
@@ -169,14 +167,13 @@ async function deleteComment(podId, commentId) {
         pod.comments = pod.comments.filter(comment => comment.commentId !== parseInt(commentId));
 
         await axios.put(`https://peapods-base.onrender.com/pods/${podId}`, pod);
-
         fetchPods();
     } catch (error) {
         console.error("Error deleting comment:", error);
     }
 }
 
-// Открытие и закрытие модального окна для создания пода
+// Open and close modal for creating pod
 const createPodButton = document.getElementById("createPodButton");
 const createPodModal = document.getElementById("createPodModal");
 const closeModalButton = document.getElementById("closeModalButton");
@@ -194,87 +191,69 @@ closeModalButton.addEventListener("click", () => {
     }, 300);
 });
 
-// Ограничение размера поста (15 Кб)
 submitPodButton.addEventListener("click", async () => {
     const podText = document.getElementById("podText").value;
-    const podImage = document.getElementById("podImage").files[0];
+    const podImageInput = document.getElementById("podImageInput").files[0];
+    const isAnonymous = document.getElementById("anonymousCheckbox").checked;
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
-    if (podText.trim() === "") {
-        alert("Pod cannot be empty!");
-        return;
+    const podData = {
+        text: podText,
+        username: isAnonymous ? null : loggedInUser.username,
+        time: new Date().toISOString(),
+        userImage: isAnonymous ? null : document.querySelector(".home__avatar").src,
+        userId: isAnonymous ? null : loggedInUser.id
+    };
+
+    if (podImageInput) {
+        const reader = new FileReader();
+        reader.onload = async function (event) {
+            podData.image = event.target.result;
+            await createPod(podData);
+        };
+        reader.readAsDataURL(podImageInput);
+    } else {
+        await createPod(podData);
     }
 
-    if (new Blob([podText]).size > 15360) {
-        alert("Pod text exceeds the size limit (15 Kb)!");
-        return;
-    }
-
-    await addPod(podText, podImage);
-
-    createPodModal.classList.toggle("change__invisible");
-    setTimeout(() => {
-        createPodModal.style.display = "none";
-    }, 300);
+    createPodModal.style.display = "none";
 });
 
-// Добавление нового пода
-async function addPod(podText, podImage) {
-    try {
-        const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-        const podData = {
-            username: loggedInUser.username,
-            text: podText,
-            time: new Date().toISOString(),
-            comments: []
-        };
-
-        if (podImage) {
-            const reader = new FileReader();
-            reader.onload = async function () {
-                podData.image = reader.result;
-                await savePod(podData);
-            };
-            reader.readAsDataURL(podImage);
-        } else {
-            await savePod(podData);
-        }
-    } catch (error) {
-        console.error("Error adding pod:", error);
-    }
-}
-
-// Сохранение пода
-async function savePod(podData) {
+// Create a new pod
+async function createPod(podData) {
     try {
         await axios.post("https://peapods-base.onrender.com/pods", podData);
-
-        const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-        loggedInUser.podsCount = (loggedInUser.podsCount || 0) + 1;
-        localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
-
-        await updateProfilePodCount(loggedInUser.username);
-
         fetchPods();
     } catch (error) {
-        console.error("Error saving pod:", error);
+        console.error("Error creating pod:", error);
     }
 }
 
-// Обновление количества подов в профиле
-async function updateProfilePodCount(username) {
-    try {
-        const response = await axios.get("https://peapods-base.onrender.com/accounts");
-        const profiles = response.data;
-        const profile = profiles.find(profile => profile.username === username);
-
-        if (profile) {
-            profile.podsCount = (profile.podsCount || 0) + 1;
-            await axios.put(`https://peapods-base.onrender.com/accounts/${profile.id}`, profile);
-        }
-    } catch (error) {
-        console.error("Error updating profile pod count:", error);
-    }
-}
-
+// Initialize
 fetchProfiles();
 fetchPods();
+
+
+const toTopButton = document.querySelector(".totop");
+const updatePods = document.querySelector(".updatepage");
+
+toTopButton.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+});
+
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 100) {
+    toTopButton.style.display = "block";
+  } else {
+    toTopButton.style.display = "none";
+  }
+});
+
+
+updatePods.addEventListener("click", () => {
+    fetchProfiles();
+    fetchPods();
+})

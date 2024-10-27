@@ -7,6 +7,11 @@
     bottom: 0;
 }
 
+.avatar__preview{
+    width: 50px;
+    height: 50px;
+}
+
 .getstart__title{
     display: block;
     margin-top: 30px;
@@ -92,7 +97,10 @@
 .register__inputs{
     display: flex;
 justify-content: center;
-gap: 20px;
+gap: 10px;
+width: 70%;
+margin-right: auto;
+margin-left: auto;
 }
 
 .register__input{
@@ -241,10 +249,11 @@ text-align: center;
 
    .register__inputs{
     display: block;
-    width:100%;
+    width:90%;
     text-align: center;
     
    }
+   
 
    .register__input{
     margin-bottom: 10px;

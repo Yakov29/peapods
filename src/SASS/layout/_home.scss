@@ -1,149 +1,236 @@
 .home__profile {
-  border-radius: 10;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-  width: 250px;
-  padding: 25px;
-  position: absolute;
- right: 250px;
-}
-
-.home__avatar {
-  width: 90px;
-  height: 90px;
-  border: 4px solid #FFFFFF;
-}
-
-.home__edit{
-    width: 140px;
-    background: none;
-    border: 1px solid #DEDEDE;
-    height: 32px;
-    margin-right: 10px;
-    margin-top: 20px;
-    border-radius: 100px;
-    font-weight: 700;
-}
-
-.home__data{
-    display: flex;
-    gap: 50px;
-    padding-left: 0;
-}
-
-.data__item{
-    text-align: center;
-}
-
-.pod__user__image{
-    width: 45px;
-    height: 45px;
-}
-
-.pods{
-    position: absolute;
-    left: 250px;
-    padding: 0;
-    margin: 0;
-}
-
-
-.pod{
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    padding: 20px;
     border-radius: 10px;
-    margin-bottom: 20px;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.pod__title{
-    display: flex;
-    gap: 15px;
-    align-items: center;
-}
-
-.pod__user__image{
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    width: 250px;
+    padding: 25px;
+    position: fixed;
+    right: 50px;
+    top: 150px;
+    background-color: #fefefe;
+  }
+  
+  .home__avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
     border: 4px solid #FFFFFF;
+  }
+  
+  .home__edit {
+      width: 140px;
+      background: none;
+      border: 1px solid #DEDEDE;
+      height: 32px;
+      margin-top: 20px;
+      margin-right: 10px;
+      border-radius: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .home__edit:hover {
+      background-color: #45cd89;
+      color: white;
+      border-color: #45cd89;
+  }
+  
+  .home__data {
+      display: flex;
+      gap: 50px;
+      padding-left: 0;
+      flex-wrap: wrap;
+  }
+  
+  .data__item {
+      text-align: center;
+  }
+  
+  .pod__user__image {
+      width: 45px;
+      height: 45px;
+      display: none;
+      border-radius: 50%;
+  }
+  
+  .pods {
+      position: absolute;
+      left: 250px;
+      padding: 0;
+      margin: 0;
+  }
+  
+  .delete-comment-btn {
+      background-color: #ff4d4d;
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+  }
+  
+  .delete-comment-btn:hover {
+      background-color: #d44;
+  }
+  
+  .pod {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 50px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      background-color: #fefefe;
+  }
+  
+  .pod__title {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+  }
+  
+  .pod__user__image {
+      border: 4px solid #FFFFFF;
+      border-radius: 50%;
+  }
+  
+  .pod__userdata {
+      font-weight: 700;
+      color: #333;
+  }
+  
+  .pod__time {
+      color: #B0B0B0;
+      font-size: 12px;
+      margin-top: 5px;
+  }
+  
+  .pod__image {
+      max-width: 100%;
+      border-radius: 10px;
+  }
+  
+  .delete-pod-button {
+      background-color: #ff4d4d;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 8px 12px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background-color 0.3s ease;
+  }
+  
+  .delete-pod-button:hover {
+      background-color: #d44;
+  }
+  
+  .comments-list {
+      margin-top: 20px;
+      padding-left: 0;
+      list-style-type: none;
+  }
+  
+  .comment-item {
+      border: 3px solid #45cd89;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      background-color: #f9f9f9;
+  }
+  
+  .comment-text {
+      width: 90%;
+      height: 40px;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      background-color: #dedede;
+      font-size: 14px;
+      resize: none;
+  }
+  
+  .home__name{
+    font-size: 46px;
+    margin: 0;
+    margin-bottom: 40px;
+  }
+
+.home__nickname{
+    color: gray;
+    font-size: 30px;
 }
 
-.pod__userdata{
-    font-weight: 700;
-}
-
-.pod__time{
-    color: #B0B0B0;
-    font-size:12;
-    margin-top: 5px;
-}
-
-
-.pod__image{
-    max-width: 500px;
-}
-
-
-.delete-pod-button {
-    background-color: #ff4d4d;
+  .like-comment-btn{
+    background-color: rgb(0, 123, 255);
     color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 5px 10px;
-    cursor: pointer;
-    margin-top: 10px;
-    margin-left: 10px;
-}
-
-.delete-pod-button:hover {
-    background-color: #d44;
-}
-
-.comments-list{
-    margin-top: 20px;
-}
-
-
-.comment-item{
-    border: #45cd89 3px solid;
-    padding: 10px;
     border-radius: 10px;
-    margin-bottom: 10px;
-}
+    width: 100px;
+    height: 30px;
+  }
+  
+  .comment-btn {
+      width: 150px;
+      height: 40px;
+      margin-top: 10px;
+      border-radius: 10px;
+      background-color: #45cd89;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      border: none;
+  }
+  
+  .comment-btn:hover {
+      background-color: #36b37e;
+  }
 
-.comment-text{
-    height: 40px;
-    padding-left: 10px;
-    border-radius: 10px;
-    border: none;
-    background-color: #dedede;
-}
+  .totop{
+    position: fixed;
+    background-color: #36b37e;
+    width: 70px;
+    height: 70px;
+    font-size: 40;
+    border-radius: 100px;
+    right: 30px;
+    bottom: 30px;
+    outline: 5px solid white;
+  }
 
-.comment-btn{
-    width: 150px;
-    height: 40px;
-    border-radius: 10px;
-    background-color: #45cd89;
-    color: #FFFFFF;
-}
-
-@media screen and (max-width:1400px) {
-   .pods{
-    left: 10px;
+  .updatepage{
+    position: fixed;
+    background-color: #36b37e;
+    width: 50px;
+    height: 50px;
+    font-size: 30;
+    border-radius: 100px;
     right: 10px;
-    top: 400px;
-   }
-
-   .pod__image{
-    width: 100%;
-   }
-
-   .home__profile{
     top: 100px;
-    right: 10;
-    // right: 10px;
-    // left: 10px;
-    // width: 100%;
-   }
- }
- 
- 
+    outline: 5px solid white;
+  }
+  
+  @media screen and (max-width: 1400px) {
+     .pods {
+      left: 10px;
+      right: 10px;
+      top: 100px;
+     }
+  
+     .pod__image {
+      width: 100%;
+     }
+  
+     .home__profile {
+    //   top: 100px;
+    //   right: 10px;
+    //   left: 10px;
+    //   width: auto;
+    display: none;
+     }
+
+     
+  }
+  
