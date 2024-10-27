@@ -18,12 +18,25 @@
   <body>
     <include src="./header.html"></include>
     <div class="home__profile" id="profileContainer">
+      <!-- <img class="home__avatar" src="./images/Group 5.19.png" alt="" /> -->
       <h5 class="home__name" id="profileName">LOADING</h5>
       <p class="home__nickname" id="profileNickname">LOADING</p>
+      <!-- <ul class="home__data">
+        <li class="data__item">
+          <h5 class="home__number" id="podsCount">2 Pods</h5>
+        </li>
+        <li class="data__item">
+          <h5 class="home__number" id="followingCount">248 Following</h5>
+        </li>
+        <li class="data__item">
+          <h5 class="home__number" id="followersCount">5 Followers</h5>
+        </li>
+      </ul> -->
       <a href="./profile.html"><button class="home__edit">Edit</button></a>
     </div>    
-    <ul class="pods" id="podsContainer"></ul>
-    
+    <ul class="pods" id="podsContainer">
+      <!-- Pods will be dynamically inserted here -->
+    </ul>
     <div class="pod__modal" id="createPodModal" style="display: none">
       <div class="modal__content">
         <button id="closeModalButton" class="close-modal">&times;</button>
@@ -36,15 +49,15 @@
           />
           <input type="file" id="podImageInput" accept="image/*" />
           <label>
-            <input type="checkbox" id="anonymousCheckbox"> Post Anonymously (Leave unchecked to post with your name)
-          </label>
+            <input type="checkbox" id="anonymousCheckbox"> Post Anonymously
+        </label>
           <button id="submitPodButton">Submit</button>
         </div>
       </div>
     </div>
 
     <script type="module" src="./js/home.js"></script>
-    <button class="totop">👆</button>
-    <button class="updatepage">⇄</button>
   </body>
+  <button class="totop">👆</button>
+  <button class="updatepage">⇄</button>
 </html>
