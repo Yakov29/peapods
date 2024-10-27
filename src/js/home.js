@@ -72,13 +72,13 @@ async function fetchPods() {
 
             userImage.addEventListener("click", () => {
                 if (pod.username) {
-                    window.location.href = `/user.html?username=${encodeURIComponent(pod.username)}`;
+                    window.location.href = `user.html?username=${encodeURIComponent(pod.username)}`;
                 }
             });
 
             usernameElement.addEventListener("click", () => {
                 if (pod.username) {
-                    window.location.href = `/user.html?username=${encodeURIComponent(pod.username)}`;
+                    window.location.href = `user.html?username=${encodeURIComponent(pod.username)}`;
                 }
             });
 
