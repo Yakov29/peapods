@@ -1,5 +1,3 @@
-import axios from "axios";
-
 // Fetch user profile data on page load
 async function fetchProfile() {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));

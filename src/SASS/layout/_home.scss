@@ -1,3 +1,4 @@
+
 .home__profile {
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -186,13 +187,7 @@
     transition: background-color 0.3s; /* Плавный переход цвета фона */
 }
 
-.comment-btn:hover,
-.like-pod-btn:hover,
-.like-comment-btn:hover,
-.delete-comment-btn:hover {
-    background-color: #e0e0e0; /* Цвет фона при наведении */
-    color: #0056b3; /* Цвет текста при наведении */
-}
+
 
   
   .comment-btn {

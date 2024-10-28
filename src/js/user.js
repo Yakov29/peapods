@@ -1,5 +1,3 @@
-import axios from "axios";
-
 // Function to fetch user profile
 async function fetchProfiles() {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
@@ -26,8 +24,8 @@ async function fetchProfiles() {
     // Fetch user profile by username from URL
     if (usernameFromURL) {
         try {
-            const response = await axios.get("https://peapods-base.onrender.com/accounts");
-            const profiles = response.data;
+            const response = await fetch("https://peapods-base.onrender.com/accounts");
+            const profiles = await response.json();
             const userProfile = profiles.find(profile => profile.username === usernameFromURL);
             
             if (userProfile && loggedInUser.username !== usernameFromURL) {
@@ -52,8 +50,8 @@ async function fetchProfiles() {
 // Function to fetch pods of a specific user
 async function fetchPods(username) {
     try {
-        const response = await axios.get("https://peapods-base.onrender.com/pods");
-        const pods = response.data
+        const response = await fetch("https://peapods-base.onrender.com/pods");
+        const pods = await response.json()
             .filter(pod => pod.username === username) // Filter pods by username
             .sort((a, b) => new Date(b.time) - new Date(a.time));
         
@@ -123,7 +121,18 @@ async function subscribeToUser(loggedInUser, userToSubscribe) {
             following: [...(loggedInUser.following || []), userToSubscribe.username]
         };
 
-        await axios.put(`https://peapods-base.onrender.com/accounts/${loggedInUser.id}`, updatedUser);
+        const response = await fetch(`https://peapods-base.onrender.com/accounts/${loggedInUser.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedUser)
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to subscribe to user");
+        }
+
         localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
         alert(`Subscribed to ${userToSubscribe.username} successfully!`);
     } catch (error) {

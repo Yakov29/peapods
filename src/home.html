@@ -8,6 +8,7 @@
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
       rel="stylesheet"
@@ -35,7 +36,7 @@
     "
   >
     <include src="./header.html"></include>
-    <div class="home__profile" id="profileContainer">
+    <div data-aos="zoom-out-left" class="home__profile" id="profileContainer">
       <!-- <img class="home__avatar" src="./images/Group 5.19.png" alt="" /> -->
       <h5 class="home__name" id="profileName">LOADING</h5>
       <p class="home__nickname" id="profileNickname">LOADING</p>
@@ -77,7 +78,12 @@
     </div>
 
     <script type="module" src="./js/home.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init();
+    </script>
   </body>
-  <button class="totop" id="toTopButton" style="display: none">👆</button>
+  
+  <!-- <button id="toTopButton" class="toTop" style="display: none;">↑</button> -->
   <button class="updatepage">⇄</button>
 </html>

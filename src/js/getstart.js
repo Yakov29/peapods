@@ -1,5 +1,3 @@
-import axios from "axios";
-
 // Check if user is already logged in
 window.addEventListener("DOMContentLoaded", () => {
     const loggedInUser = localStorage.getItem("loggedInUser");
@@ -44,8 +42,8 @@ registerButton.addEventListener("click", async () => {
 
     try {
         // Fetch existing users
-        const response = await axios.get("https://peapods-base.onrender.com/accounts");
-        const users = response.data;
+        const response = await fetch("https://peapods-base.onrender.com/accounts");
+        const users = await response.json();
 
         // Check if username or email already exists
         const userExists = users.some(user => user.username === username || user.email === email);
@@ -62,11 +60,19 @@ registerButton.addEventListener("click", async () => {
             password,
         };
 
-        const registerResponse = await axios.post("https://peapods-base.onrender.com/accounts", userData);
-        if (registerResponse.status === 201) {
-            alert("Registration successful! Please log in.");
-            getstartedBackdrop.classList.remove("change__invisible");
-            registerBackdrop.classList.add("change__invisible");
+        const registerResponse = await fetch("https://peapods-base.onrender.com/accounts", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userData),
+        });
+
+        if (registerResponse.ok) {
+            const newUser = await registerResponse.json(); // Get the newly created user data
+            localStorage.setItem("loggedInUser", JSON.stringify(newUser)); // Automatically log the user in
+            alert("Registration successful! You are now logged in.");
+            window.location.href = "home.html"; // Redirect to home page
         }
     } catch (error) {
         console.error("Error during registration:", error);
@@ -81,8 +87,8 @@ loginButton.addEventListener("click", async () => {
     const password = document.querySelector(".login__password").value;
 
     try {
-        const response = await axios.get("https://peapods-base.onrender.com/accounts");
-        const users = response.data;
+        const response = await fetch("https://peapods-base.onrender.com/accounts");
+        const users = await response.json();
 
         // Find user by email and password
         const user = users.find(user => user.email === email && user.password === password);
