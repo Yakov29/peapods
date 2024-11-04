@@ -238,7 +238,12 @@
      .pods {
       left: 10px;
       right: 10px;
-      top: 100px;
+      top: 50px;
+      margin-top: 300px;
+     }
+
+     .pod{
+        margin-bottom: 300px;
      }
   
      .pod__image {
@@ -246,11 +251,12 @@
      }
   
      .home__profile {
-    //   top: 100px;
-    //   right: 10px;
-    //   left: 10px;
-    //   width: auto;
-    display: none;
+      top: 100px;
+      right: 10px;
+      left: 10px;
+      width: auto;
+
+    // display: none;
      }
 
      

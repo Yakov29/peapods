@@ -27,7 +27,7 @@ async function updateProfile(event) {
                 password // Ensure password is hashed on the server side
             };
 
-            const response = await fetch(`https://peapods-base.onrender.com/accounts/${loggedInUser.id}`, {
+            const response = await fetch(`http://localhost:3000/api/accounts/${loggedInUser.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -62,7 +62,7 @@ async function deleteAccount() {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
     if (loggedInUser && loggedInUser.id) {
         try {
-            const response = await fetch(`https://peapods-base.onrender.com/accounts/${loggedInUser.id}`, {
+            const response = await fetch(`http://localhost:3000/api/accounts/${loggedInUser.id}`, {
                 method: 'DELETE'
             });
 

@@ -64,5 +64,42 @@ header .container{
 
 .header__logo{
     display: block;
-    margin-right: auto;
+    margin-left: auto;
+}
+
+.header__burger{
+    background: none;
+}
+
+.header__backdrop{
+    position: fixed;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   background-color: white;
+//    z-index: 5;
+}
+
+.header__modal__list{
+    margin-top: 100px;
+    margin-left: 15px;
+
+}
+
+.header__modal__item{
+    margin-bottom: 50px;
+}
+
+.header__modal__link{
+font-size: 50;
+text-decoration: none;
+color: #45cd89;
+}
+
+.header__close{
+    background: none;
+    position: absolute;
+    top:15;
+    right: 15;
 }

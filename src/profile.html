@@ -20,7 +20,7 @@
   </head>
   <body style="
   /* background-image: url(./images/R-2.jpg); */
-  background-color: #006db0;
+  background-color: #00723f;
   background-blend-mode: overlay;
 ">
     <include src="./header.html"></include>
@@ -62,4 +62,21 @@
       }
     </script>
   </body>
+  <script src="./js/header.js" type="module"></script>
+  <div class="header__backdrop change__invisible">
+    <div class="header__modal">
+      <button class="header__close"><img src="./svg/icons8-close.svg" alt=""></button>
+      <ul class="header__modal__list">
+        <li class="header__modal__item">
+          <a class="header__modal__link" href="./home.html">Home</a>
+        </li>
+        <li class="header__modal__item">
+          <a class="header__modal__link" href="./discover.html">Discover</a>
+        </li>
+        <li class="header__modal__item">
+          <a class="header__modal__link" href="./profile.html">Profile</a>
+        </li>
+      </ul>
+    </div>
+  </div>
 </html>

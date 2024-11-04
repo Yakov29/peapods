@@ -42,7 +42,7 @@ registerButton.addEventListener("click", async () => {
 
     try {
         // Fetch existing users
-        const response = await fetch("https://peapods-base.onrender.com/accounts");
+        const response = await fetch("http://localhost:3000/api/accounts");
         const users = await response.json();
 
         // Check if username or email already exists
@@ -60,7 +60,7 @@ registerButton.addEventListener("click", async () => {
             password,
         };
 
-        const registerResponse = await fetch("https://peapods-base.onrender.com/accounts", {
+        const registerResponse = await fetch("http://localhost:3000/api/accounts", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -87,7 +87,7 @@ loginButton.addEventListener("click", async () => {
     const password = document.querySelector(".login__password").value;
 
     try {
-        const response = await fetch("https://peapods-base.onrender.com/accounts");
+        const response = await fetch("http://localhost:3000/api/accounts");
         const users = await response.json();
 
         // Find user by email and password

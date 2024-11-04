@@ -4,7 +4,7 @@ async function fetchProfiles() {
     
     if (loggedInUser) {
         try {
-            const response = await fetch(`https://peapods-base.onrender.com/accounts/${loggedInUser.id}`);
+            const response = await fetch(`http://localhost:3000/api/accounts/${loggedInUser.id}`);
             const user = await response.json();
 
             // Check if the user exists in the database
@@ -34,7 +34,7 @@ function handleProfileError() {
 // Fetch pods
 async function fetchPods() {
     try {
-        const response = await fetch("https://peapods-base.onrender.com/pods");
+        const response = await fetch("http://localhost:3000/api/pods");
         const pods = await response.json();
         const sortedPods = pods.sort((a, b) => new Date(b.time) - new Date(a.time));
         const podsContainer = document.getElementById("podsContainer");
@@ -107,7 +107,7 @@ async function fetchPods() {
 // Delete a pod
 async function deletePod(podId) {
     try {
-        await fetch(`https://peapods-base.onrender.com/pods/${podId}`, {
+        await fetch(`http://localhost:3000/api/pods/${podId}`, {
             method: 'DELETE'
         });
         await updateProfilePodCountOnDelete(podId);
@@ -120,16 +120,16 @@ async function deletePod(podId) {
 // Update profile pod count on delete
 async function updateProfilePodCountOnDelete(podId) {
     try {
-        const response = await fetch(`https://peapods-base.onrender.com/pods/${podId}`);
+        const response = await fetch(`http://localhost:3000/api/pods/${podId}`);
         const pod = await response.json();
         
-        const profileResponse = await fetch("https://peapods-base.onrender.com/accounts");
+        const profileResponse = await fetch("http://localhost:3000/api/accounts");
         const profiles = await profileResponse.json();
         const profile = profiles.find(profile => profile.username === pod.username);
 
         if (profile) {
             profile.podsCount = (profile.podsCount || 0) - 1;
-            await fetch(`https://peapods-base.onrender.com/accounts/${profile.id}`, {
+            await fetch(`http://localhost:3000/api/accounts/${profile.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -170,7 +170,7 @@ function setupCommentListeners() {
 async function addComment(podId, commentText) {
     try {
         const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-        const response = await fetch(`https://peapods-base.onrender.com/pods/${podId}`);
+        const response = await fetch(`http://localhost:3000/api/pods/${podId}`);
         const pod = await response.json();
 
         const newComment = {
@@ -183,7 +183,7 @@ async function addComment(podId, commentText) {
         pod.comments = pod.comments || [];
         pod.comments.push(newComment);
 
-        await fetch(`https://peapods-base.onrender.com/pods/${podId}`, {
+        await fetch(`http://localhost:3000/api/pods/${podId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -199,12 +199,12 @@ async function addComment(podId, commentText) {
 // Delete a comment
 async function deleteComment(podId, commentId) {
     try {
-        const response = await fetch(`https://peapods-base.onrender.com/pods/${podId}`);
+        const response = await fetch(`http://localhost:3000/api/pods/${podId}`);
         const pod = await response.json();
 
         pod.comments = pod.comments.filter(comment => comment.commentId !== parseInt(commentId));
 
-        await fetch(`https://peapods-base.onrender.com/pods/${podId}`, {
+        await fetch(`http://localhost:3000/api/pods/${podId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -276,7 +276,7 @@ submitPodButton.addEventListener("click", async () => {
 // Save new pod
 async function savePod(pod) {
     try {
-        await fetch("https://peapods-base.onrender.com/pods", {
+        await fetch("http://localhost:3000/api/pods", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
